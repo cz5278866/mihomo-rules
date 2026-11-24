@@ -1,0 +1,253 @@
+# 3X-UI Clash / Mihomo 远程路由模板
+# Hrules 提供场景规则集，DustinWin 提供广告和国内游戏规则集。
+proxy-groups:
+  - name: "PROXY"
+    type: select
+    include-all: true
+    exclude-filter: &notice-filter '(?i)^(剩余流量|流量剩余|剩余|套餐到期|订阅到期|到期时间|到期|有效期|官网|官方|traffic|remaining|expire|expiry|quota|bandwidth|website|homepage)(\s|[：:|｜]|$)'
+    empty-fallback: REJECT
+
+  - name: "⚡ 最低延迟"
+    type: url-test
+    include-all: true
+    exclude-filter: *notice-filter
+    empty-fallback: REJECT
+    url: https://www.gstatic.com/generate_204
+    expected-status: 204
+    interval: 300
+    timeout: 5000
+    tolerance: 50
+
+  - name: "🌐 海外应用"
+    type: select
+    proxies:
+      - "PROXY"
+      - "⚡ 最低延迟"
+      - "DIRECT"
+    include-all: true
+    exclude-filter: *notice-filter
+
+  - name: "▶ YouTube"
+    type: select
+    proxies:
+      - "PROXY"
+      - "⚡ 最低延迟"
+    include-all: true
+    exclude-filter: *notice-filter
+
+  - name: "📺 流媒体"
+    type: select
+    proxies:
+      - "PROXY"
+      - "⚡ 最低延迟"
+      - "DIRECT"
+    include-all: true
+    exclude-filter: *notice-filter
+
+  - name: "🤖 AI 服务"
+    type: select
+    proxies:
+      - "PROXY"
+      - "DIRECT"
+    include-all: true
+    exclude-filter: *notice-filter
+
+  - name: "💳 金融服务"
+    type: select
+    proxies:
+      - "PROXY"
+      - "DIRECT"
+    include-all: true
+    exclude-filter: *notice-filter
+
+  - name: "🐟 漏网之鱼"
+    type: select
+    proxies:
+      - "PROXY"
+      - "⚡ 最低延迟"
+      - "DIRECT"
+    include-all: true
+    exclude-filter: *notice-filter
+
+  - name: "🛑 广告拦截"
+    type: select
+    proxies:
+      - REJECT
+      - PASS
+
+rule-providers:
+  private-network:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/hcloudlab/Hrules/main/mihomo/scenes/private_direct.yaml
+    path: ./ruleset/hrules-custom/private-network.yaml
+    interval: 21600
+
+  china-domains:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/hcloudlab/Hrules/main/mihomo/scenes/cn_direct.yaml
+    path: ./ruleset/hrules-custom/china-domains.yaml
+    interval: 21600
+
+  network-tests:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/hcloudlab/Hrules/main/mihomo/scenes/network_test.yaml
+    path: ./ruleset/hrules-custom/network-tests.yaml
+    interval: 21600
+
+  sensitive-ai:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/hcloudlab/Hrules/main/mihomo/scenes/sensitive_ai.yaml
+    path: ./ruleset/hrules-custom/sensitive-ai.yaml
+    interval: 21600
+
+  general-ai:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/hcloudlab/Hrules/main/mihomo/scenes/general_ai.yaml
+    path: ./ruleset/hrules-custom/general-ai.yaml
+    interval: 21600
+
+  apple-intelligence:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/hcloudlab/Hrules/main/mihomo/scenes/apple_intelligence_route.yaml
+    path: ./ruleset/hrules-custom/apple-intelligence.yaml
+    interval: 21600
+
+  crypto:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/hcloudlab/Hrules/main/mihomo/scenes/crypto_account.yaml
+    path: ./ruleset/hrules-custom/crypto.yaml
+    interval: 21600
+
+  banking:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/hcloudlab/Hrules/main/mihomo/scenes/us_banking_account.yaml
+    path: ./ruleset/hrules-custom/banking.yaml
+    interval: 21600
+
+  brokerage:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/hcloudlab/Hrules/main/mihomo/scenes/brokerage_account.yaml
+    path: ./ruleset/hrules-custom/brokerage.yaml
+    interval: 21600
+
+  financial:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/hcloudlab/Hrules/main/mihomo/scenes/financial_account.yaml
+    path: ./ruleset/hrules-custom/financial.yaml
+    interval: 21600
+
+  youtube:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/hcloudlab/Hrules/main/mihomo/scenes/youtube_media.yaml
+    path: ./ruleset/hrules-custom/youtube.yaml
+    interval: 21600
+
+  streaming:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/hcloudlab/Hrules/main/mihomo/scenes/streaming_media.yaml
+    path: ./ruleset/hrules-custom/streaming.yaml
+    interval: 21600
+
+  telegram:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/hcloudlab/Hrules/main/mihomo/scenes/telegram.yaml
+    path: ./ruleset/hrules-custom/telegram.yaml
+    interval: 21600
+
+  apple-relay:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/hcloudlab/Hrules/main/mihomo/scenes/apple_private_relay_route.yaml
+    path: ./ruleset/hrules-custom/apple-relay.yaml
+    interval: 21600
+
+  apple-global:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/hcloudlab/Hrules/main/mihomo/scenes/apple_global.yaml
+    path: ./ruleset/hrules-custom/apple-global.yaml
+    interval: 21600
+
+  overseas-apps:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/hcloudlab/Hrules/main/mihomo/scenes/mainstream_proxy.yaml
+    path: ./ruleset/hrules-custom/overseas-apps.yaml
+    interval: 21600
+
+  ads:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/ads.mrs
+    path: ./ruleset/hrules-custom/ads.mrs
+    interval: 86400
+
+  china-games:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/games-cn.mrs
+    path: ./ruleset/hrules-custom/china-games.mrs
+    interval: 86400
+
+  china-ip:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs
+    path: ./ruleset/hrules-custom/china-ip.mrs
+    interval: 21600
+
+rules:
+  - RULE-SET,private-network,DIRECT,no-resolve
+  - RULE-SET,ads,🛑 广告拦截
+  - RULE-SET,china-domains,DIRECT
+  - RULE-SET,china-games,DIRECT
+
+  - RULE-SET,network-tests,🤖 AI 服务
+  - RULE-SET,sensitive-ai,🤖 AI 服务
+  - RULE-SET,general-ai,🤖 AI 服务
+  - RULE-SET,apple-intelligence,🤖 AI 服务
+  - RULE-SET,crypto,💳 金融服务
+  - RULE-SET,banking,💳 金融服务
+  - RULE-SET,brokerage,💳 金融服务
+  - RULE-SET,financial,💳 金融服务
+
+  - RULE-SET,youtube,▶ YouTube
+  - RULE-SET,streaming,📺 流媒体
+  - RULE-SET,telegram,🌐 海外应用,no-resolve
+  - RULE-SET,apple-relay,🌐 海外应用
+  - RULE-SET,apple-global,🌐 海外应用
+  - RULE-SET,overseas-apps,🌐 海外应用
+  - RULE-SET,china-ip,DIRECT,no-resolve
+  - MATCH,🐟 漏网之鱼
